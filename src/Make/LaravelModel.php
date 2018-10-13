@@ -26,9 +26,9 @@ class LaravelModel
     /**
      * Model constructor.
      */
-    public function __construct(LaravelHandler $laravelHandler)
+    public function __construct()
     {
-        $this->handle = $laravelHandler;
+        $this->handle = new LaravelHandler();
     }
 
     /**
