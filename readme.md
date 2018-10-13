@@ -1,4 +1,3 @@
 ## DTECH CLI
 
-- Generate CodeIgniter code
-- Generate Laravel code
+- Generate Laravel code (model)
