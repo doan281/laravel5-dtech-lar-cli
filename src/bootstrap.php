@@ -1,8 +1,19 @@
 <?php
 
+use DtechLarCLI\CLI\Make\LaravelController;
 use DtechLarCLI\CLI\Make\LaravelModel;
 use DtechLarCLI\CLI\Clear\Clear;
 
+/**
+ * Make model:
+ * php dtech make:model Product (create file app/Models/Product.php)
+ * php dtech make:model UserPermission (create file app/Models/UserPermission.php)
+ * php dtech make:model Admin/User (create file app/Models/Admin/User.php)
+ * ---------------------------------------------------------------------------------------------------------------------
+ * Make controller:
+ * php dtech make:controller Product (create file app/Http/Controllers/ProductController.php)
+ *
+ */
 if (isset($_SERVER["argv"][1])) {
     $code = explode(':', $_SERVER["argv"][1]);
 
@@ -14,7 +25,7 @@ if (isset($_SERVER["argv"][1])) {
             case 'make':
                 switch ($code[1]) {
                     case 'controller':
-                        //$instance = new Controller();
+                        $instance = new LaravelController();
                         $classAction = "Controller";
 
                         break;
@@ -30,9 +41,12 @@ if (isset($_SERVER["argv"][1])) {
                 }
 
                 if (!empty($_SERVER['argv'][2])) {
-                    $instance->create($_SERVER['argv'][2]);
-
-                    echo "Create sucsessfully " . $classAction . ": {$_SERVER['argv'][2]}\n";
+                    if (! in_array(null, explode('/', $_SERVER['argv'][2]))) {
+                        $instance->create($_SERVER['argv'][2]);
+                        echo "Create sucsessfully " . $classAction . ": {$_SERVER['argv'][2]}\n";
+                    } else {
+                        echo $classAction . ' name (or ' . $classAction . ' path name) is invalid.' . "\n";
+                    }
 
                     die();
                 } else {

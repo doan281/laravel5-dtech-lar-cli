@@ -46,7 +46,8 @@ class LaravelHandler implements HandlerInterface
      */
     private function getFile($path)
     {
-        return (explode('/', $path))[count(explode('/', $path)) - 1];
+        $items = explode('/', $path);
+        return trim($items[count($items) - 1]);
     }
 
     /**
@@ -58,6 +59,7 @@ class LaravelHandler implements HandlerInterface
     private function getFolder($path)
     {
         $array = explode('/', $path);
+        $array = array_map('trim', $array);
         unset($array[count($array) - 1]);
 
         return implode('/', $array);
@@ -73,6 +75,50 @@ class LaravelHandler implements HandlerInterface
         if (!is_dir($arrayPath)) {
             mkdir($arrayPath);
         }
+    }
+
+    /**
+     * $data = App/Models/Admin/User
+     * @param $data
+     * @return string
+     */
+    private function getNamespace($data)
+    {
+        $items = explode('/', $data);
+
+        if(count($items) > 0){
+            if(count($items) > 1){
+                unset($items[count($items) - 1]);
+            }
+
+            $namespace = array_map('trim', $items);
+            $namespace = array_map('strtolower', $namespace);
+            $namespace = array_map('ucfirst', $namespace);
+
+            return implode("\\", $namespace);
+        } else {
+            return 'App';
+        }
+
+    }
+
+    /**
+     * $data = App/Models/Admin/User
+     * @param $data
+     * @return string
+     */
+    private function getTableName($data)
+    {
+        $items = explode('/', $data);
+        $table_name = snake_case($items[count($items) - 1]);
+
+        /*$array_name = explode('_', $table_name);
+        if (count($array_name) > 1) {
+            return $table_name . '/' . $table_name . 's';
+        }*/
+
+        return $table_name .'s';
+
     }
 
     public function handleData($data)
@@ -91,7 +137,19 @@ class LaravelHandler implements HandlerInterface
     {
         $datafromRead = $this->readData($path);
 
-        return str_replace('{$name}', $this->handleData($data), $datafromRead);
+        return str_replace(
+            [
+                '{$class_name}',
+                '{$namespace}',
+                '{$table_name}'
+            ],
+            [
+                $this->handleData($data),
+                $this->getNamespace($data),
+                $this->getTableName($data)
+            ],
+            $datafromRead
+        );
     }
 
     /**
