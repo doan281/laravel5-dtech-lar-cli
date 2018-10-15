@@ -7,7 +7,7 @@ use Dtech\LaravelCLI\Handler\LaravelHandler;
 /**
  *
  */
-class LaravelModel
+class LaravelRepository
 {
     /**
      * Contain LaravelHandler instance Object
@@ -21,10 +21,10 @@ class LaravelModel
      *
      * @var string
      */
-    private $baseFolder = 'app/Models/';
+    private $baseFolder = 'app/Repositories/';
 
     /**
-     * Model constructor.
+     * Controller constructor.
      */
     public function __construct()
     {
@@ -38,6 +38,6 @@ class LaravelModel
      */
     public function create($name)
     {
-        $this->handle->make('model', $this->baseFolder . $name);
+        $this->handle->make('repository', $this->baseFolder . $name);
     }
 }

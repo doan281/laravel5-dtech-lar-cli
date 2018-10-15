@@ -1,6 +1,6 @@
 <?php
 
-namespace DtechLarCLI\CLI\Clear;
+namespace Dtech\LaravelCLI\Clear;
 
 interface  ClearInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace DtechLarCLI\CLI\Make;
+namespace Dtech\LaravelCLI\Make;
 
-use DtechLarCLI\CLI\Handler\LaravelHandler;
+use Dtech\LaravelCLI\Handler\LaravelHandler;
 
 /**
  *

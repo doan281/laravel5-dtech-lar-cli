@@ -1,8 +1,11 @@
 <?php
 
-use DtechLarCLI\CLI\Make\LaravelController;
-use DtechLarCLI\CLI\Make\LaravelModel;
-use DtechLarCLI\CLI\Clear\Clear;
+use Dtech\LaravelCLI\Make\LaravelController;
+use Dtech\LaravelCLI\Make\LaravelModel;
+use Dtech\LaravelCLI\Make\LaravelRepository;
+use Dtech\LaravelCLI\Make\LaravelRequest;
+use Dtech\LaravelCLI\Make\LaravelTrait;
+use Dtech\LaravelCLI\Clear\Clear;
 
 /**
  * Make model:
@@ -27,12 +30,22 @@ if (isset($_SERVER["argv"][1])) {
                     case 'controller':
                         $instance = new LaravelController();
                         $classAction = "Controller";
-
                         break;
                     case 'model':
                         $instance = new LaravelModel();
                         $classAction = "Model";
-
+                        break;
+                    case 'repository':
+                        $instance = new LaravelRepository();
+                        $classAction = "Repository";
+                        break;
+                    case 'request':
+                        $instance = new LaravelRequest();
+                        $classAction = "Request";
+                        break;
+                    case 'trait':
+                        $instance = new LaravelTrait();
+                        $classAction = "Trait";
                         break;
 
                     default:

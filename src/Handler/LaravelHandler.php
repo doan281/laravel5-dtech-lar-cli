@@ -1,6 +1,6 @@
 <?php
 
-namespace DtechLarCLI\CLI\Handler;
+namespace Dtech\LaravelCLI\Handler;
 
 class LaravelHandler implements HandlerInterface
 {
@@ -9,13 +9,13 @@ class LaravelHandler implements HandlerInterface
      *
      * @var array
      */
-    private $type = ['controller', 'model'];
+    private $type = ['controller', 'model', 'repository', 'request', 'trait'];
 
     /**
      * string suport
      * @var string
      */
-    private $stringSuport = 'controller, model';
+    private $stringSuport = 'controller, model, repository, request, trait';
 
     /**
      * Read data form template folder
