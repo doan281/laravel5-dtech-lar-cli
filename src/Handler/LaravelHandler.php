@@ -9,14 +9,14 @@ class LaravelHandler implements HandlerInterface
      *
      * @var array
      */
-    private $type = ['controller', 'model', 'repository', 'request', 'trait'];
+    private $type = ['controller', 'model', 'repository', 'request', 'scope', 'trait'];
 
     /**
      * String suport
      *
      * @var string
      */
-    private $stringSuport = 'controller, model, repository, request, trait';
+    private $stringSuport = 'controller, model, repository, request, scope, trait';
 
     /**
      * Read data form template folder
@@ -187,13 +187,13 @@ class LaravelHandler implements HandlerInterface
 
         $data = $this->bindData($type, $name);
 
-        if (strtolower($type) == 'model') {
+        /*if (strtolower($type) == 'model') {
             $suffixFilename = '';
         } else {
             $suffixFilename = ucfirst(strtolower($type));
-        }
+        }*/
 
-        $file = @fopen($name . $suffixFilename . '.php', 'w+');
+        $file = @fopen($name . '.php', 'w+');
 
         if ($file) {
             return fwrite($file, $data);

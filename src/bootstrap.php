@@ -4,6 +4,7 @@ use DtechLarCLI\CLI\Make\LaravelController;
 use DtechLarCLI\CLI\Make\LaravelModel;
 use DtechLarCLI\CLI\Make\LaravelRepository;
 use DtechLarCLI\CLI\Make\LaravelRequest;
+use DtechLarCLI\CLI\Make\LaravelScope;
 use DtechLarCLI\CLI\Make\LaravelTrait;
 use DtechLarCLI\CLI\Clear\Clear;
 
@@ -42,6 +43,10 @@ if (isset($_SERVER["argv"][1])) {
                     case 'request':
                         $instance = new LaravelRequest();
                         $classAction = "Request";
+                        break;
+                    case 'scope':
+                        $instance = new LaravelScope();
+                        $classAction = "Scope";
                         break;
                     case 'trait':
                         $instance = new LaravelTrait();
