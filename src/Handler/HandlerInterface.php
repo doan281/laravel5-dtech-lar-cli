@@ -1,6 +1,6 @@
 <?php
 
-namespace Dtech\LaravelCLI\Handler;
+namespace DtechLarCLI\CLI\Handler;
 
 interface HandlerInterface
 {

@@ -1,11 +1,11 @@
 <?php
 
-use Dtech\LaravelCLI\Make\LaravelController;
-use Dtech\LaravelCLI\Make\LaravelModel;
-use Dtech\LaravelCLI\Make\LaravelRepository;
-use Dtech\LaravelCLI\Make\LaravelRequest;
-use Dtech\LaravelCLI\Make\LaravelTrait;
-use Dtech\LaravelCLI\Clear\Clear;
+use DtechLarCLI\CLI\Make\LaravelController;
+use DtechLarCLI\CLI\Make\LaravelModel;
+use DtechLarCLI\CLI\Make\LaravelRepository;
+use DtechLarCLI\CLI\Make\LaravelRequest;
+use DtechLarCLI\CLI\Make\LaravelTrait;
+use DtechLarCLI\CLI\Clear\Clear;
 
 /**
  * Make model:

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dtech\LaravelCLI\Clear;
+namespace DtechLarCLI\CLI\Clear;
 
 class Clear implements ClearInterface
 {
