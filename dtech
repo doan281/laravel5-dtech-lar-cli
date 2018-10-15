@@ -1,0 +1,11 @@
+#!/usr/bin/php -q
+<?php
+
+require_once 'vendor/autoload.php';
+
+if (file_exists('vendor/dtech-lar-cli/cli/src/bootstrap.php')) {
+    require_once 'vendor/dtech-lar-cli/cli/src/bootstrap.php';
+} else {
+    echo 'Missing vendor, you need run: conposer install';
+}
+
