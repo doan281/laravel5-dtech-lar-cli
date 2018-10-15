@@ -4,6 +4,11 @@ namespace DtechLarCLI\CLI\Clear;
 
 class Clear implements ClearInterface
 {
+    /**
+     * Clear cache
+     *
+     * @param $path
+     */
     public function clear($path)
     {
         if (is_dir($path)) {

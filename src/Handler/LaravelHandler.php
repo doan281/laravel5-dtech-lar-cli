@@ -12,7 +12,8 @@ class LaravelHandler implements HandlerInterface
     private $type = ['controller', 'model', 'repository', 'request', 'trait'];
 
     /**
-     * string suport
+     * String suport
+     *
      * @var string
      */
     private $stringSuport = 'controller, model, repository, request, trait';
@@ -40,7 +41,8 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
-     * get name of file
+     * Get name of file
+     *
      * @param $path
      * @return mixed
      */
@@ -51,7 +53,7 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
-     * get folder
+     * Get folder
      *
      * @param $path
      * @return string
@@ -66,7 +68,7 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
-     * create folder if folder not exist
+     * Create folder if folder not exist
      *
      * @param string $arrayPath
      */
@@ -78,6 +80,8 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
+     * Get namespace
+     *
      * $data = App/Models/Admin/User
      * @param $data
      * @return string
@@ -103,6 +107,8 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
+     * Get default table name
+     *
      * $data = App/Models/Admin/User
      * @param $data
      * @return string
@@ -121,6 +127,12 @@ class LaravelHandler implements HandlerInterface
 
     }
 
+    /**
+     * Get file
+     *
+     * @param $data
+     * @return mixed
+     */
     public function handleData($data)
     {
 
@@ -133,6 +145,13 @@ class LaravelHandler implements HandlerInterface
         return $this->getFile($data);
     }
 
+    /**
+     * Bind data into template
+     *
+     * @param $path
+     * @param $data
+     * @return mixed
+     */
     public function bindData($path, $data)
     {
         $datafromRead = $this->readData($path);
@@ -153,7 +172,7 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
-     * make file
+     * Make file
      *
      * @param $type
      * @param $name
@@ -165,15 +184,22 @@ class LaravelHandler implements HandlerInterface
             echo "{$type} must is {$this->stringSuport}";
             return false;
         }
+
         $data = $this->bindData($type, $name);
-        $file = @fopen($name . '.php', 'w+');
+
+        if (strtolower($type) == 'model') {
+            $suffixFilename = '';
+        } else {
+            $suffixFilename = ucfirst(strtolower($type));
+        }
+
+        $file = @fopen($name . $suffixFilename . '.php', 'w+');
 
         if ($file) {
             return fwrite($file, $data);
         } else {
             die("permission error!\n");
         }
-
     }
 
 }

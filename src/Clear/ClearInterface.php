@@ -2,7 +2,7 @@
 
 namespace DtechLarCLI\CLI\Clear;
 
-interface  ClearInterface
+interface ClearInterface
 {
-    public function Clear($path);
+    public function clear($path);
 }

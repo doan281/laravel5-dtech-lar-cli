@@ -5,7 +5,8 @@ namespace DtechLarCLI\CLI\Make;
 use DtechLarCLI\CLI\Handler\LaravelHandler;
 
 /**
- *
+ * Class LaravelRequest
+ * @package DtechLarCLI\CLI\Make
  */
 class LaravelRequest
 {
