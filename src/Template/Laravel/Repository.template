@@ -20,7 +20,6 @@ class {$class_name}Repository
     /**
      * Get list
      *
-     * @param Request $request
      */
     public function listing()
     {

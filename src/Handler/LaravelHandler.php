@@ -187,13 +187,13 @@ class LaravelHandler implements HandlerInterface
 
         $data = $this->bindData($type, $name);
 
-        /*if (strtolower($type) == 'model') {
+        if (strtolower($type) == 'model') {
             $suffixFilename = '';
         } else {
             $suffixFilename = ucfirst(strtolower($type));
-        }*/
+        }
 
-        $file = @fopen($name . '.php', 'w+');
+        $file = @fopen($name . $suffixFilename . '.php', 'w+');
 
         if ($file) {
             return fwrite($file, $data);
