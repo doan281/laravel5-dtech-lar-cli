@@ -2,11 +2,7 @@
 The package same as artisan command in Laravel
 ### Install
 ##### Step 1: install package
-- In root folder, run command:
-```
-composer require dtech-lar-cli/cli
-```
-or config in composer.json
+Config in composer.json
 ```
 "require": 
 {

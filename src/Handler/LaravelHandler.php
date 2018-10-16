@@ -70,12 +70,34 @@ class LaravelHandler implements HandlerInterface
     /**
      * Create folder if folder not exist
      *
-     * @param string $arrayPath
+     * @param $type
+     * @param $arrayPath
+     * @return bool
      */
-    private function createFolder($arrayPath)
+    private function createFolder($type, $arrayPath)
     {
-        if (!is_dir($arrayPath)) {
-            mkdir($arrayPath);
+        try {
+            $items = explode('/', $arrayPath);
+            if (count($items) >= 2) {
+                /* Create base folder */
+                $basePath = $items[0] . '/' . $items[1];
+                if (strtolower($type) == 'request' && count($items) >= 3) {
+                    $basePath = $items[0] . '/' . $items[1] . '/' . $items[2];
+                }
+                if (!is_dir($basePath)) {
+                    mkdir($basePath);
+                }
+                /* Create sub folder */
+                if (!is_dir($arrayPath)) {
+                    mkdir($arrayPath);
+                }
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
         }
     }
 
@@ -133,13 +155,13 @@ class LaravelHandler implements HandlerInterface
      * @param $data
      * @return mixed
      */
-    public function handleData($data)
+    public function handleData($type, $data)
     {
 
         if (strpbrk('/', $data) !== false) {
             $folder = $this->getFolder($data);
 
-            $this->createFolder($folder);
+            $this->createFolder($type, $folder);
         }
 
         return $this->getFile($data);
@@ -163,7 +185,7 @@ class LaravelHandler implements HandlerInterface
                 '{$table_name}'
             ],
             [
-                $this->handleData($data),
+                $this->handleData($path, $data),
                 $this->getNamespace($data),
                 $this->getTableName($data)
             ],
