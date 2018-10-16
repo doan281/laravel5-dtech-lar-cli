@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+
+class TriggerAfterDeleteReceiverCustomFieldValues extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        DB::unprepared('
+            CREATE TRIGGER after_delete_receiver_custom_field_values AFTER DELETE ON `receiver_custom_field_values`
+            FOR EACH ROW
+            BEGIN
+                DECLARE custom_field_data_list TEXT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL;
+                SELECT get_custom_field_data_list(OLD.receiver_id) INTO custom_field_data_list;
+                UPDATE `receivers`
+                SET `custom_field_data_list` = custom_field_data_list
+                WHERE `id` = OLD.receiver_id;
+                SET NAMES utf8mb4;
+            END
+        ');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::unprepared('DROP TRIGGER `after_delete_receiver_custom_field_values`');
+    }
+}

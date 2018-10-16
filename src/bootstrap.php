@@ -30,33 +30,29 @@ if (isset($_SERVER["argv"][1])) {
                 switch ($code[1]) {
                     case 'controller':
                         $instance = new LaravelController();
-                        $classAction = "Controller";
                         break;
                     case 'model':
                         $instance = new LaravelModel();
-                        $classAction = "Model";
                         break;
                     case 'repository':
                         $instance = new LaravelRepository();
-                        $classAction = "Repository";
                         break;
                     case 'request':
                         $instance = new LaravelRequest();
-                        $classAction = "Request";
                         break;
                     case 'scope':
                         $instance = new LaravelScope();
-                        $classAction = "Scope";
                         break;
                     case 'trait':
                         $instance = new LaravelTrait();
-                        $classAction = "Trait";
                         break;
 
                     default:
                         echo $code[1] . " not defined! \n";
                         die();
                 }
+
+                $classAction = ucfirst($code[1]);
 
                 if (!empty($_SERVER['argv'][2])) {
                     if (! in_array(null, explode('/', $_SERVER['argv'][2]))) {
@@ -93,7 +89,13 @@ if (isset($_SERVER["argv"][1])) {
 
         }
     } else {
-        echo "make:controller \t Create controller \n make:model \t\t Create model \n make:eloquent \t\t Create model extends eloquent \n make:helper \t\t Create helper \n make:library \t\t Create library";
+        $cmd = "make:controller \t Create controller in folder app/Http/Controllers/ \n" .
+            "make:model \t\t Create model in folder app/Models/ \n" .
+            "make:repository \t Create repository in folder app/Repositories/ \n" .
+            "make:request \t\t Create request in folder app/Htpp/Requests/ \n" .
+            "make:scope \t\t Create scope in folder app/Scopes/ \n" .
+            "make:trait \t\t Create trait in folder app/Traits/";
+        echo $cmd;
     }
 }
 

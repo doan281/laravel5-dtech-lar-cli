@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+
+class FunctionGetCustomFieldDataList extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        DB::unprepared('
+            DROP FUNCTION IF EXISTS `get_custom_field_data_list`;
+            CREATE FUNCTION get_custom_field_data_list(receiver_id INT) RETURNS TEXT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
+            READS SQL DATA
+            SQL SECURITY INVOKER
+            BEGIN
+                DECLARE custom_field_data_list TEXT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL;
+                SELECT CONCAT(GROUP_CONCAT(CONCAT(\'[\', rev.receiver_custom_field_id, \':=]\', rev.`value`) SEPARATOR \'||\'),\'||\') INTO custom_field_data_list
+                FROM `receiver_custom_field_values` rev
+                WHERE rev.`receiver_id` = receiver_id;
+                RETURN custom_field_data_list;
+            END
+        ');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::unprepared('DROP FUNCTION `get_custom_field_data_list`');
+    }
+}
