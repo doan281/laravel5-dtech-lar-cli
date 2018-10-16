@@ -120,7 +120,6 @@ class LaravelHandler implements HandlerInterface
             }
 
             $namespace = array_map('trim', $items);
-            $namespace = array_map('strtolower', $namespace);
             $namespace = array_map('ucfirst', $namespace);
 
             return implode("\\", $namespace);
