@@ -9,14 +9,14 @@ class LaravelHandler implements HandlerInterface
      *
      * @var array
      */
-    private $type = ['controller', 'model', 'repository', 'request', 'scope', 'trait'];
+    private $type = ['controller', 'function', 'model', 'procedure', 'repository', 'request', 'scope', 'trait', 'trigger'];
 
     /**
      * String suport
      *
      * @var string
      */
-    private $stringSuport = 'controller, model, repository, request, scope, trait';
+    private $stringSuport = 'controller, function, model, procedure, repository, request, scope, trait, trigger';
 
     /**
      * Read data form template folder
@@ -41,15 +41,112 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
+     * Get file
+     *
+     * @param $data
+     * @return mixed
+     */
+    public function handleData($type, $data)
+    {
+
+        if (strpbrk('/', $data) !== false) {
+            $folder = $this->getFolder($data);
+
+            $this->createFolder($folder);
+        }
+
+        return ucfirst(camel_case($this->getFile($type, $data)));
+    }
+
+    /**
+     * Bind data into template
+     *
+     * @param $path
+     * @param $data
+     * @return mixed
+     */
+    public function bindData($path, $data, $table=null)
+    {
+        $datafromRead = $this->readData($path);
+
+        return str_replace(
+            [
+                '{$class_name}',
+                '{$namespace}',
+                '{$table_name}',
+                '{$store_name}',
+                '{$trigger_table}'
+            ],
+            [
+                $this->handleData($path, $data),
+                $this->getNamespace($data),
+                $this->getTableName($data),
+                $this->createStoreName($path, $data),
+                (empty($table) ? 'users' : $table)
+            ],
+            $datafromRead
+        );
+    }
+
+    /**
+     * Make file
+     *
+     * @param $type
+     * @param $name
+     * @return bool|int
+     */
+    public function make($type, $name, $table=null)
+    {
+        if (!in_array(strtolower($type), $this->type)) {
+            echo "{$type} must is {$this->stringSuport}";
+            return false;
+        }
+
+        $data = $this->bindData($type, $name, $table);
+
+        if (in_array(strtolower($type), ['function', 'model', 'procedure', 'trigger'])) {
+            $suffixFilename = '';
+            /* 2018_10_18_000809_trigger_before_insert_users */
+            if (strtolower($type) != 'model') {
+                if (count(explode('/', $name)) == 3) {
+                    if (preg_match("/^[a-zA-Z\_\/]+$/", $name)) {
+                        $name = $this->createStoreFileName($type, $name);
+                    } else {
+                        die(ucfirst($type) . " name (a-z, A-Z, _) is invalid!\n");
+                    }
+                } else {
+                    die(ucfirst($type) . " name is invalid! Remove '/' character!\n");
+                }
+            }
+        } else {
+            $suffixFilename = ucfirst(strtolower($type));
+        }
+
+        $file = @fopen($name . $suffixFilename . '.php', 'w+');
+
+        if ($file) {
+            return fwrite($file, $data);
+
+        } else {
+            die("permission error!\n");
+        }
+    }
+
+    /**
      * Get name of file
      *
      * @param $path
      * @return mixed
      */
-    private function getFile($path)
+    private function getFile($type, $path)
     {
         $items = explode('/', $path);
-        return trim($items[count($items) - 1]);
+
+        if (in_array(strtolower($type), ['function', 'procedure', 'trigger'])) {
+            return snake_case(strtolower($type) . '_' . trim($items[count($items) - 1]));
+        } else {
+            return trim($items[count($items) - 1]);
+        }
     }
 
     /**
@@ -151,78 +248,37 @@ class LaravelHandler implements HandlerInterface
     }
 
     /**
-     * Get file
-     *
-     * @param $data
-     * @return mixed
-     */
-    public function handleData($data)
-    {
-
-        if (strpbrk('/', $data) !== false) {
-            $folder = $this->getFolder($data);
-
-            $this->createFolder($folder);
-        }
-
-        return $this->getFile($data);
-    }
-
-    /**
-     * Bind data into template
-     *
-     * @param $path
-     * @param $data
-     * @return mixed
-     */
-    public function bindData($path, $data)
-    {
-        $datafromRead = $this->readData($path);
-
-        return str_replace(
-            [
-                '{$class_name}',
-                '{$namespace}',
-                '{$table_name}'
-            ],
-            [
-                $this->handleData($data),
-                $this->getNamespace($data),
-                $this->getTableName($data)
-            ],
-            $datafromRead
-        );
-    }
-
-    /**
-     * Make file
+     * Get store name in mysql
      *
      * @param $type
      * @param $name
-     * @return bool|int
+     * @return mixed
      */
-    public function make($type, $name)
+    private function createStoreName($type, $name)
     {
-        if (!in_array(strtolower($type), $this->type)) {
-            echo "{$type} must is {$this->stringSuport}";
-            return false;
-        }
-
-        $data = $this->bindData($type, $name);
-
-        if (strtolower($type) == 'model') {
-            $suffixFilename = '';
+        if (in_array(strtolower($type), ['function', 'procedure', 'trigger'])) {
+            return $this->getFile($type, $name);
         } else {
-            $suffixFilename = ucfirst(strtolower($type));
-        }
-
-        $file = @fopen($name . $suffixFilename . '.php', 'w+');
-
-        if ($file) {
-            return fwrite($file, $data);
-        } else {
-            die("permission error!\n");
+            return $type;
         }
     }
 
+    /**
+     * Get store file name in database/migrations folder
+     *
+     * @param $type
+     * @param $name
+     * @return string
+     */
+    private function createStoreFileName($type, $name)
+    {
+        $items = explode('/', $name);
+
+        if (in_array(strtolower($type), ['function', 'procedure', 'trigger'])) {
+            return $items[0] . '/' . $items[1] . '/' . date('Y_m_d_His_') . $this->createStoreName($type, $name);
+        } else {
+            return $type;
+        }
+
+    }
 }
