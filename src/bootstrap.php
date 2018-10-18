@@ -12,14 +12,7 @@ use DtechLarCLI\CLI\Make\LaravelTrigger;
 use DtechLarCLI\CLI\Clear\Clear;
 
 /**
- * Make model:
- * php dtech make:model Product (create file app/Models/Product.php)
- * php dtech make:model UserPermission (create file app/Models/UserPermission.php)
- * php dtech make:model Admin/User (create file app/Models/Admin/User.php)
- * ---------------------------------------------------------------------------------------------------------------------
- * Make controller:
- * php dtech make:controller Product (create file app/Http/Controllers/ProductController.php)
- *
+ * Make:controller, function, model, procedure, repository, request, scope, trait, trigger
  */
 if (isset($_SERVER["argv"][1])) {
     $code = explode(':', $_SERVER["argv"][1]);
